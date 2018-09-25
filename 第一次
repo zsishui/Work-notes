@@ -1,1 +1,37 @@
 今天学习了免密登陆，如果想要让node1可以免密登陆node2.则只需要将node1节点中/root/.ssh中的id_rsa.pub 写入到node2的authorized_kays中就可以了
+学习了怎么使用虚拟机：
+1、找到已经创建完成的虚拟机的目录，
+┌-_-# root@host-95 /home/zhangjianming
+└>ls
+learngit  node0  node1  node2  scripts
+┌-_-# root@host-95 /home/zhangjianming
+└>cd node0
+┌-_-# root@host-95 /home/zhangjianming/node0
+└>ls
+vm.0.qcow2  vm.xml  zxvei-vm_docker_17.03_ce.qcow2  zxvei-vm.qcow2
+
+直接copy一份 node0目录就可以
+cp node0 node1
+cd node1
+vm.0.qcow2  vm.xml  zxvei-vm_docker_17.03_ce.qcow2  zxvei-vm.qcow2
+vim vm.xml (进行修改配置文件，主要是名字)
+<name>zjm-node0</name> //改成不一样的node1
+<uuid>5f207399-79a1-4f60-ab5c-f45537916910</uuid> //用uuidgen生成一个（后续看一下uuid是什么东西）
+<source file='/home/zhangjianming/node0/zxvei-vm_docker_17.03_ce.qcow2'/> // 这个是硬盘的镜像，目录指向copy的哪个目录（node0-》node1）
+<mac address='fa:36:1e:e2:09:17'/> //主机的mac地址，就修改了两个参数
+至此，虚拟机的配置就改好了，也可以按需要改别的配置
+
+因为是直接copy的另一个虚拟机，所以里面的别的配置是一样的，比如主机名、ip地址。所以在启动这个虚拟机之前，需要关闭之前的虚拟机
+ssh 192.168.100.21 //进入虚拟机里面
+init 0 //关闭虚拟机
+
+cd ../node1 // 进入新创建的虚拟机的目录
+virsh create vm.xml //启动这个新copy的虚拟机
+//这时候通过 ssh 192.168.100.21 进入新创建的虚拟机里面
+
+//首先修改主机名
+vim /etc/hostname
+
+vim /etc/sysconfig/network-scripts/ifcfg-eth0 // 修改主机的ip地址
+
+这样就可以启动之前那个虚拟机了。

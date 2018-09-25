@@ -33,5 +33,6 @@ virsh create vm.xml //启动这个新copy的虚拟机
 vim /etc/hostname
 
 vim /etc/sysconfig/network-scripts/ifcfg-eth0 // 修改主机的ip地址
+ifdown eth0 && ifup eth0 // 更新一下网络配置
 
 这样就可以启动之前那个虚拟机了。

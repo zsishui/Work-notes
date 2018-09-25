@@ -1,0 +1,1 @@
+今天学习了免密登陆，如果想要让node1可以免密登陆node2.则只需要将node1节点中/root/.ssh中的id_rsa.pub 写入到node2的authorized_kays中就可以了
